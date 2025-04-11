@@ -20,46 +20,43 @@
         </form>
         <p>ليس لديك حساب؟ <a href="signup.html">إنشاء حساب</a></p>
     </div>
-    
-    <script>
-        async function loginUser(event) {
-            event.preventDefault();  // منع إعادة تحميل الصفحة عند إرسال النموذج
 
+    <!-- Firebase مكتبات -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAgJdpJMbccfc1jtvReuhc-IeIQhHox1sI",
+            authDomain: "user-login-system-af907.firebaseapp.com",
+            databaseURL: "https://user-login-system-af907-default-rtdb.firebaseio.com/",
+            projectId: "user-login-system-af907",
+            storageBucket: "user-login-system-af907.appspot.com",
+            messagingSenderId: "749941405536",
+            appId: "1:749941405536:web:xxxxxx" // هذا اختياري، مش ضروري حاليًا
+        };
+        
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // تسجيل الدخول
+        async function loginUser(event) {
+            event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // إعداد البيانات لإرسالها إلى API تسجيل الدخول
-            const loginData = {
-                email: email,
-                password: password
-            };
-
             try {
-                // إرسال طلب POST إلى الخادم للتحقق من بيانات تسجيل الدخول
-                const response = await fetch('https://your-odoo-instance.com/api/authenticate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer AIzaSyAgJdpJMbccfc1jtvReuhc-IeIQhHox1sI'  // إضافة الـ Web API Key هنا
-                    },
-                    body: JSON.stringify(loginData)
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // إذا كانت البيانات صحيحة، قم بإعادة توجيه المستخدم
-                    window.location.href = 'dashboard.html';  // الصفحة التي تلي تسجيل الدخول
-                } else {
-                    alert('بيانات الدخول غير صحيحة');
-                }
+                // تحقق من صحة بيانات تسجيل الدخول
+                await auth.signInWithEmailAndPassword(email, password);
+                alert('تم تسجيل الدخول بنجاح 🎉');
+                window.location.href = "https://creativeminds2.odoo.com/home"; // تحويل المستخدم إلى صفحة Odoo
             } catch (error) {
-                console.error('Error:', error);
-                alert('حدث خطأ أثناء الاتصال بالخادم. حاول لاحقًا.');
+                console.error(error);
+                alert('فشل تسجيل الدخول ❌: الإيميل أو كلمة المرور غير صحيحة');
             }
         }
     </script>
-
-    <script src="script.js"></script>
 </body>
 </html>

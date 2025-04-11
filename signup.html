@@ -42,7 +42,7 @@
                 return;
             }
 
-            // إعداد البيانات لإرسالها إلى API إنشاء الحساب
+            // إعداد البيانات لإرسالها إلى Firebase
             const signupData = {
                 email: email,
                 phone: phone,
@@ -50,27 +50,45 @@
             };
 
             try {
-                // إرسال طلب POST إلى الخادم لإنشاء حساب جديد
-                const response = await fetch('https://your-odoo-instance.com/api/signup', {
+                // التحقق من عدم وجود البريد الإلكتروني في Firebase
+                const databaseURL = 'https://user-login-system-af907-default-rtdb.firebaseio.com/';
+                const usersRef = `${databaseURL}/users.json`;  // الوصول إلى مجموعة المستخدمين في قاعدة البيانات
+
+                // جلب بيانات المستخدمين من Firebase
+                const response = await fetch(usersRef);
+                const data = await response.json();
+
+                let emailExists = false;
+                for (let key in data) {
+                    if (data[key].email === email) {
+                        emailExists = true;
+                        break;
+                    }
+                }
+
+                if (emailExists) {
+                    alert('البريد الإلكتروني موجود مسبقًا، يرجى استخدام بريد آخر.');
+                    return;
+                }
+
+                // إرسال البيانات إلى Firebase لإضافة المستخدم الجديد
+                await fetch(usersRef, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer AIzaSyAgJdpJMbccfc1jtvReuhc-IeIQhHox1sI'  // إضافة الـ Web API Key هنا
                     },
-                    body: JSON.stringify(signupData)
+                    body: JSON.stringify({
+                        email: email,
+                        phone: phone,
+                        password: password
+                    })
                 });
 
-                const result = await response.json();
-
-                if (result.success) {
-                    // إذا كان التسجيل ناجحًا، قم بإعادة توجيه المستخدم
-                    window.location.href = 'login.html';  // العودة إلى صفحة تسجيل الدخول
-                } else {
-                    alert('حدث خطأ أثناء إنشاء الحساب');
-                }
+                alert('تم إنشاء الحساب بنجاح!');
+                window.location.href = 'login.html';  // توجيه المستخدم إلى صفحة تسجيل الدخول بعد الإنشاء
             } catch (error) {
                 console.error('Error:', error);
-                alert('حدث خطأ أثناء الاتصال بالخادم. حاول لاحقًا.');
+                alert('حدث خطأ أثناء الاتصال بقاعدة البيانات. حاول لاحقًا.');
             }
         }
     </script>
