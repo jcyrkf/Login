@@ -9,7 +9,7 @@
 <body>
     <div class="signup-container">
         <h2>إنشاء حساب جديد</h2>
-        <form id="signupForm" action="submit_form.php" method="POST">
+        <form id="signupForm" onsubmit="signupUser(event)">
             <label for="email">البريد الإلكتروني</label>
             <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required>
 
@@ -26,6 +26,53 @@
         </form>
         <p>هل لديك حساب؟ <a href="login.html">تسجيل الدخول</a></p>
     </div>
+
+    <script>
+        async function signupUser(event) {
+            event.preventDefault();  // منع إعادة تحميل الصفحة عند إرسال النموذج
+
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // التحقق من تطابق كلمة المرور
+            if (password !== confirmPassword) {
+                alert('كلمة المرور وتأكيد كلمة المرور غير متطابقتين');
+                return;
+            }
+
+            // إعداد البيانات لإرسالها إلى API إنشاء الحساب
+            const signupData = {
+                email: email,
+                phone: phone,
+                password: password
+            };
+
+            try {
+                // إرسال طلب POST إلى الخادم لإنشاء حساب جديد
+                const response = await fetch('https://your-odoo-instance.com/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(signupData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // إذا كان التسجيل ناجحًا، قم بإعادة توجيه المستخدم
+                    window.location.href = 'login.html';  // العودة إلى صفحة تسجيل الدخول
+                } else {
+                    alert('حدث خطأ أثناء إنشاء الحساب');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم. حاول لاحقًا.');
+            }
+        }
+    </script>
 
     <script src="script.js"></script>
 </body>

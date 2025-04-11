@@ -9,7 +9,7 @@
 <body>
     <div class="login-container">
         <h2>تسجيل الدخول</h2>
-        <form id="loginForm">
+        <form id="loginForm" onsubmit="loginUser(event)">
             <label for="email">البريد الإلكتروني</label>
             <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required>
             
@@ -21,6 +21,44 @@
         <p>ليس لديك حساب؟ <a href="signup.html">إنشاء حساب</a></p>
     </div>
     
+    <script>
+        async function loginUser(event) {
+            event.preventDefault();  // منع إعادة تحميل الصفحة عند إرسال النموذج
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // إعداد البيانات لإرسالها إلى API تسجيل الدخول
+            const loginData = {
+                email: email,
+                password: password
+            };
+
+            try {
+                // إرسال طلب POST إلى الخادم للتحقق من بيانات تسجيل الدخول
+                const response = await fetch('https://your-odoo-instance.com/api/authenticate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // إذا كانت البيانات صحيحة، قم بإعادة توجيه المستخدم
+                    window.location.href = 'dashboard.html';  // الصفحة التي تلي تسجيل الدخول
+                } else {
+                    alert('بيانات الدخول غير صحيحة');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم. حاول لاحقًا.');
+            }
+        }
+    </script>
+
     <script src="script.js"></script>
 </body>
 </html>
