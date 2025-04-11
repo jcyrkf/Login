@@ -54,7 +54,8 @@
                 const response = await fetch('https://your-odoo-instance.com/api/signup', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer AIzaSyAgJdpJMbccfc1jtvReuhc-IeIQhHox1sI'  // إضافة الـ Web API Key هنا
                     },
                     body: JSON.stringify(signupData)
                 });
