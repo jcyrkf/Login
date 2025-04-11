@@ -42,9 +42,9 @@ label {
 input {
     width: 100%;
     padding: 14px;
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* تقليل المسافة */
     border: 2px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px; /* تعديل الحواف لتكون متناسقة */
     font-size: 18px;
     transition: all 0.3s ease;
 }
@@ -62,7 +62,7 @@ button {
     background-color: #fbc02d;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px; /* توحيد الحواف */
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;

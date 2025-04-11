@@ -7,6 +7,13 @@ document.getElementById('loginForm').onsubmit = function(event) {
 
     // التحقق من وجود البيانات
     if (email && password) {
+        // التحقق من صحة البريد الإلكتروني باستخدام تعبير نمطي (Regex)
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(email)) {
+            alert('البريد الإلكتروني غير صالح.');
+            return;
+        }
+
         // استخدام Firebase للتحقق من البيانات
         const databaseURL = 'https://user-login-system-af907-default-rtdb.firebaseio.com/'; // رابط قاعدة بيانات Firebase
         const usersRef = `${databaseURL}/users.json`; // الوصول إلى مجموعة المستخدمين
@@ -48,8 +55,26 @@ document.getElementById('signupForm').onsubmit = function(event) {
     var password = document.getElementById('password').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
 
+    // التحقق من صحة البريد الإلكتروني باستخدام تعبير نمطي (Regex)
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(email)) {
+        alert('البريد الإلكتروني غير صالح.');
+        return;
+    }
+
     // التحقق من تطابق كلمة المرور
     if (password === confirmPassword) {
+
+        // التحقق من قوة كلمة المرور (يجب أن تحتوي على أحرف كبيرة وصغيرة وأرقام)
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordPattern.test(password)) {
+            alert('كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، ورقم، وأن تكون مكونة من 8 أحرف على الأقل.');
+            return;
+        }
+
+        // تشفير كلمة المرور باستخدام bcrypt (يمكنك تضمين مكتبة bcrypt.js هنا)
+        const hashedPassword = bcrypt.hashSync(password, 10); // استخدام bcrypt لتشفير كلمة المرور قبل إرسالها
+
         // إرسال البيانات إلى Firebase لإضافة المستخدم
         const databaseURL = 'https://user-login-system-af907-default-rtdb.firebaseio.com/'; // رابط قاعدة بيانات Firebase
         const usersRef = `${databaseURL}/users.json`; // الوصول إلى مجموعة المستخدمين
@@ -78,7 +103,7 @@ document.getElementById('signupForm').onsubmit = function(event) {
                         },
                         body: JSON.stringify({
                             email: email,
-                            password: password
+                            password: hashedPassword
                         })
                     })
                     .then(response => response.json())

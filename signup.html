@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إنشاء حساب</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- تضمين Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
@@ -34,13 +33,13 @@
     <script>
         // إعداد Firebase
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",  // قم باستبدالها بالمفتاح الخاص بك
-            authDomain: "YOUR_AUTH_DOMAIN",  // قم باستبدالها
+            apiKey: "YOUR_API_KEY",  // استبدل بالمفتاح الفعلي
+            authDomain: "YOUR_AUTH_DOMAIN",  // استبدل بالمجال الفعلي
             databaseURL: "https://user-login-system-af907-default-rtdb.firebaseio.com/",
-            projectId: "YOUR_PROJECT_ID",  // قم باستبدالها
-            storageBucket: "YOUR_STORAGE_BUCKET",  // قم باستبدالها
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",  // قم باستبدالها
-            appId: "YOUR_APP_ID",  // قم باستبدالها
+            projectId: "YOUR_PROJECT_ID",  // استبدل بالمعرف الفعلي
+            storageBucket: "YOUR_STORAGE_BUCKET",  // استبدل بالحاوية الفعلية
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",  // استبدل بالمعرف الفعلي
+            appId: "YOUR_APP_ID",  // استبدل بالمعرف الفعلي
         };
 
         // تهيئة Firebase
@@ -62,16 +61,21 @@
                 return;
             }
 
+            // التحقق من صحة البريد الإلكتروني
+            if (!validateEmail(email)) {
+                alert('يرجى إدخال بريد إلكتروني صالح.');
+                return;
+            }
+
             try {
-                // التحقق من وجود البريد الإلكتروني باستخدام Firebase Authentication
+                // إنشاء حساب مستخدم جديد باستخدام Firebase Authentication
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
-                // إضافة بيانات المستخدم إلى قاعدة بيانات Firebase Realtime Database
+                // إضافة بيانات المستخدم إلى Firebase Realtime Database
                 await database.ref('users/' + user.uid).set({
                     email: email,
                     phone: phone,
-                    password: password // يفضل عدم تخزين كلمة المرور مباشرة في قاعدة البيانات
                 });
 
                 alert('تم إنشاء الحساب بنجاح!');
@@ -89,8 +93,12 @@
                 }
             }
         }
-    </script>
 
-    <script src="script.js"></script>
+        // دالة للتحقق من صحة البريد الإلكتروني
+        function validateEmail(email) {
+            const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return regex.test(email);
+        }
+    </script>
 </body>
 </html>
