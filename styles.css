@@ -1,0 +1,94 @@
+/* التصميم الأساسي */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e9ecef; /* تغيير اللون إلى درجة أفتح */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+/* الشكل العام للصفحة */
+.signup-container {
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1); /* زيادة الظلال */
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+/* العنوان */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 30px; /* تكبير الخط */
+    color: #333;
+    font-weight: bold;
+}
+
+/* الحقول النصية */
+label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #555;
+    font-size: 18px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px; /* تقليل المسافة */
+    border: 2px solid #ccc;
+    border-radius: 10px; /* تعديل الحواف لتكون متناسقة */
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #fbc02d;
+    outline: none;
+    box-shadow: 0 0 8px rgba(251, 192, 45, 0.7); /* زيادة تأثير الظل */
+}
+
+/* الأزرار */
+button {
+    width: 100%;
+    padding: 16px;
+    background-color: #fbc02d;
+    color: white;
+    border: none;
+    border-radius: 10px; /* توحيد الحواف */
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* إضافة تأثير حركة */
+}
+
+button:hover {
+    background-color: #f9a825;
+    transform: translateY(-2px); /* تأثير الحركة عند المرور */
+}
+
+/* الروابط */
+a {
+    color: #fbc02d;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* النصوص المساعدة */
+p {
+    text-align: center;
+    color: #777;
+    font-size: 16px;
+}
