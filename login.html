@@ -9,7 +9,7 @@
 <body>
     <div class="login-container">
         <h2>تسجيل الدخول</h2>
-        <form id="loginForm" onsubmit="loginUser(event)">
+        <form id="loginForm">
             <label for="email">البريد الإلكتروني</label>
             <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required>
             
@@ -21,42 +21,57 @@
         <p>ليس لديك حساب؟ <a href="https://jcyrkf.github.io/Login/signup.html">إنشاء حساب</a></p>
     </div>
 
-    <!-- Firebase مكتبات -->
+    <!-- ربط مكتبات Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
+    <!-- تهيئة Firebase -->
     <script>
-        // إعداد Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAgJdpJMbccfc1jtvReuhc-IeIQhHox1sI",
-            authDomain: "user-login-system-af907.firebaseapp.com",
-            databaseURL: "https://user-login-system-af907-default-rtdb.firebaseio.com/",
-            projectId: "user-login-system-af907",
-            storageBucket: "user-login-system-af907.appspot.com",
-            messagingSenderId: "749941405536",
-            appId: "1:749941405536:web:xxxxxx" // هذا اختياري، مش ضروري حاليًا
-        };
+      const firebaseConfig = {
+        apiKey: "AIzaSyAgJdpJMbccfc1jtvReuhc-IeIQhHox1sI",
+        authDomain: "user-login-system-af907.firebaseapp.com",
+        databaseURL: "https://user-login-system-af907-default-rtdb.firebaseio.com",
+        projectId: "user-login-system-af907",
+        storageBucket: "user-login-system-af907.appspot.com",
+        messagingSenderId: "749941405536",
+        appId: "1:749941405536:web:xxxxxx" // لو عندك appId ضعه هنا أو تجاهله
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+    </script>
+
+    <!-- كود تسجيل الدخول -->
+    <script>
+      document.getElementById('loginForm').onsubmit = function(event) {
+        event.preventDefault();
         
-        // تهيئة Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
 
-        // تسجيل الدخول
-        async function loginUser(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        const usersRef = firebase.database().ref('users');
 
-            try {
-                // تحقق من صحة بيانات تسجيل الدخول
-                await auth.signInWithEmailAndPassword(email, password);
-                alert('تم تسجيل الدخول بنجاح 🎉');
-                window.location.href = "https://creativeminds2.odoo.com/home"; // تحويل المستخدم إلى صفحة Odoo
-            } catch (error) {
-                console.error(error);
-                alert('فشل تسجيل الدخول ❌: الإيميل أو كلمة المرور غير صحيحة');
+        usersRef.once('value')
+          .then(snapshot => {
+            let userFound = false;
+            snapshot.forEach(childSnapshot => {
+              const userData = childSnapshot.val();
+              if (userData.email === email && userData.password === password) {
+                userFound = true;
+              }
+            });
+
+            if (userFound) {
+              window.location.href = 'https://creativeminds2.odoo.com/home';
+            } else {
+              alert('بيانات الدخول غير صحيحة');
             }
-        }
+          })
+          .catch(error => {
+            console.error('خطأ:', error);
+            alert('حدث خطأ أثناء الاتصال بقاعدة البيانات');
+          });
+      };
     </script>
 </body>
 </html>

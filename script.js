@@ -68,7 +68,7 @@ document.getElementById('signupForm').onsubmit = function(event) {
 
                 // إذا كان الإيميل موجود مسبقًا
                 if (emailExists) {
-                    alert('الإيميل موجود مسبقًا، الرجاء استخدام إيميل آخر.');
+                    alert('هذا الحساب موجود بالفعل، الرجاء استخدام إيميل آخر.');
                 } else {
                     // إضافة المستخدم الجديد إلى قاعدة البيانات
                     fetch(usersRef, {
