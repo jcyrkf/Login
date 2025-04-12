@@ -49,20 +49,25 @@
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
 
-        // محاولة تسجيل الدخول باستخدام Firebase Authentication
-        firebase.auth().signInWithEmailAndPassword(email, password)
-          .then((userCredential) => {
-            // تسجيل الدخول ناجح
-            alert('تم تسجيل الدخول بنجاح!');
-            console.log('تم تسجيل الدخول:', userCredential.user);
-            // تحويل المستخدم لصفحة أخرى بعد تسجيل الدخول
-            window.location.href = "https://creativeminds2.odoo.com/home"; // يمكنك تغيير الرابط حسب حاجتك
-          })
-          .catch((error) => {
-            // فشل تسجيل الدخول
-            console.error('خطأ:', error.message);
-            alert('فشل تسجيل الدخول: ' + error.message);
-          });
+        // التحقق من صحة البيانات المدخلة
+        if (email && password) {
+            // محاولة تسجيل الدخول باستخدام Firebase Authentication
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // تسجيل الدخول ناجح
+                    alert('تم تسجيل الدخول بنجاح!');
+                    console.log('تم تسجيل الدخول:', userCredential.user);
+                    // تحويل المستخدم لصفحة أخرى بعد تسجيل الدخول
+                    window.location.href = "https://creativeminds2.odoo.com/home"; // يمكنك تغيير الرابط حسب حاجتك
+                })
+                .catch((error) => {
+                    // فشل تسجيل الدخول
+                    console.error('خطأ:', error.message);
+                    alert('فشل تسجيل الدخول: ' + error.message);
+                });
+        } else {
+            alert('يرجى ملء جميع الحقول.');
+        }
       };
     </script>
 </body>
